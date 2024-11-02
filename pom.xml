@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>3.3.5</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
+    <groupId>com.exampled</groupId>
+    <artifactId>kotlin-maven-springboot</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>kotlin-maven-springboot</name>
+    <description>demo</description>
+    <url/>
+    <licenses>
+        <license/>
+    </licenses>
+    <developers>
+        <developer/>
+    </developers>
+    <scm>
+        <connection/>
+        <developerConnection/>
+        <tag/>
+        <url/>
+    </scm>
+    <properties>
+        <java.version>21</java.version>
+        <kotlin.version>1.9.25</kotlin.version>
+    </properties>
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.module</groupId>
+            <artifactId>jackson-module-kotlin</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-reflect</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-stdlib</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-test-junit5</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <sourceDirectory>${project.basedir}/src/main/kotlin</sourceDirectory>
+        <testSourceDirectory>${project.basedir}/src/test/kotlin</testSourceDirectory>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.jetbrains.kotlin</groupId>
+                <artifactId>kotlin-maven-plugin</artifactId>
+                <configuration>
+                    <args>
+                        <arg>-Xjsr305=strict</arg>
+                    </args>
+                    <compilerPlugins>
+                        <plugin>spring</plugin>
+                    </compilerPlugins>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.jetbrains.kotlin</groupId>
+                        <artifactId>kotlin-maven-allopen</artifactId>
+                        <version>${kotlin.version}</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+            <plugin>
+                <groupId>org.jetbrains.kotlinx</groupId>
+                <artifactId>kover-maven-plugin</artifactId>
+                <version>0.8.3</version>
+                <executions>
+                    <!-- instrument test tasks -->
+                    <execution>
+                        <id>instr</id>
+                        <goals>
+                            <goal>instrumentation</goal>
+                        </goals>
+                    </execution>
+
+                    <!-- generate XML report in verify phase -->
+                    <execution>
+                        <id>kover-xml</id>
+                        <goals>
+                            <goal>report-xml</goal>
+                        </goals>
+                    </execution>
+
+                    <!-- generate HTML report in verify phase -->
+                    <execution>
+                        <id>kover-html</id>
+                        <goals>
+                            <goal>report-html</goal>
+                        </goals>
+                    </execution>
+
+                    <!-- check coverage rules in verify phase -->
+                    <execution>
+                        <id>kover-verify</id>
+                        <goals>
+                            <goal>verify</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>kover-ic</id>
+                        <goals>
+                            <goal>report-ic</goal>
+                        </goals>
+                    </execution>
+
+                    <execution>
+                        <id>kover-log</id>
+                        <goals>
+                            <goal>log</goal>
+                        </goals>
+                        <configuration>
+                            <logGroupBy>CLASS</logGroupBy>
+                            <logCoverageUnit>LINE</logCoverageUnit>
+                            <logAggregationForGroup>COVERED_COUNT</logAggregationForGroup>
+                            <logFormat>{value} lines covered in {entity}</logFormat>
+                        </configuration>
+                    </execution>
+                </executions>
+                <configuration>
+                    <htmlDirName>html</htmlDirName>
+                    <agentPropertyName>argLine</agentPropertyName>
+
+
+                    <title>My title</title>
+
+                    <charset>UTF-8</charset>
+
+                    <logFormat>Full coverage is {value}%</logFormat>
+
+                    <rules>
+                        <rule>
+                            <name>Basic Line Coverage</name>
+                            <bounds>
+                                <bound>
+                                    <aggregationForGroup>COVERED_PERCENTAGE</aggregationForGroup>
+                                    <coverageUnits>LINE</coverageUnits>
+                                    <maxValue>100</maxValue>
+                                    <minValue>80</minValue>
+                                </bound>
+                            </bounds>
+                        </rule>
+                        <rule>
+                            <name>Branch Coverage</name>
+                            <bounds>
+                                <bound>
+                                    <aggregationForGroup>COVERED_PERCENTAGE</aggregationForGroup>
+                                    <coverageUnits>BRANCH</coverageUnits>
+                                    <minValue>20</minValue>
+                                </bound>
+                            </bounds>
+                        </rule>
+                        <rule>
+                            <bounds>
+                                <bound>
+                                    <minValue>80</minValue>
+                                </bound>
+                            </bounds>
+                        </rule>
+                    </rules>
+                </configuration>
+
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.2.0</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                            <mainClass>com.exampled.demo.DemoApplication</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
+
+        </plugins>
+    </build>
+
+</project>
